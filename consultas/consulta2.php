@@ -2,7 +2,8 @@
 include '../conexion.php';
 
 // Crea la consulta SQL
-$sql = "SELECT COUNT(*) as total FROM mdl_user";
+$sql = "SELECT COUNT(*) AS cursos FROM `mdl_course` WHERE format='topics'";
+
 
 // Ejecuta la consulta SQL
 $result = $conn->query($sql);
@@ -11,7 +12,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Muestra los datos de cada fila
     while($row = $result->fetch_assoc()) {
-        $total = $row["total"];
+        $total = $row["cursos"];
     }
 } else {
     echo "0 resultados";
@@ -32,17 +33,17 @@ $conn->close();
     margin: 0;
     padding: 0;">
 
+    <a href="../index.php" class="my-4 text-center"><h4>Regresar al menu</h4></a>
 
-<a href="../index.php" class="my-4 text-center"><h4>Regresar al menu</h4></a>
 
     <div class="d-flex justify-content-center">
-        <button class='btn btn-primary col-2' onclick="mostrarAlerta()">Mostrar total</button>
+        <button class='btn btn-primary' onclick="mostrarAlerta()">Mostrar total</button>
     </div>
     
 
     <script>
         function mostrarAlerta() {
-            alert("Total de usuarios en moodle: <?php echo $total; ?>");
+            alert("Total de cursos en la plataforma: <?php echo $total; ?>");
         }
     </script>
 </body>

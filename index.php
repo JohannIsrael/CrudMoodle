@@ -20,13 +20,13 @@
             <div class="list-group list-group-numbered col-9">
                 <a href="consultas/consulta1.php" class="list-group-item">1.- Cuantos usuarios tiene registrados la plataforma</a>
                 <a href="consultas/consulta2.php" class="list-group-item list-group-item-action">2.- Cuantos cursos estan creados en plataforma </a>
-                <a href="#" class="list-group-item list-group-item-action">3.- Cuantos y cuales categorías existen</a>
-                <a href="#" class="list-group-item list-group-item-action">4.- Cuantos alumnos hay en cada curso</a>
-                <a href="#" class="list-group-item list-group-item-action">5.- Que tablas se afectan al subir un reurso de tipo archivo, a un topico de un curso</a>
+                <a href="consultas/consulta3.php" class="list-group-item list-group-item-action">3.- Cuantos y cuales categorías existen</a>
+                <a href="consultas/consulta4.php" class="list-group-item list-group-item-action">4.- Cuantos alumnos hay en cada curso</a>
+                <a href="consultas/consulta5.php" class="list-group-item list-group-item-action">5.- Que tablas se afectan al subir un reurso de tipo archivo, a un topico de un curso</a>
                 <a href="consultas/consulta6.php" class="list-group-item list-group-item-action">6.- En que tablas están los alumnos inscritos por curso (participantes)</a>
                 <a href="consultas/consulta7.php" class="list-group-item list-group-item-action">7.- Lista de las tareas por un curso determinado</a>
-                <a href="#" class="list-group-item list-group-item-action">8.- Listas las calificaciones de una tarea determinada por curso determinado</a>
-                <a href="#" class="list-group-item list-group-item-action">9.- Lista de los examenes de un curso dado</a>
+                <a href="consultas/consulta8.php" class="list-group-item list-group-item-action">8.- Listas las calificaciones de una tarea determinada por curso determinado</a>
+                <a href="consultas/consulta9.php" class="list-group-item list-group-item-action">9.- Lista de los examenes de un curso dado</a>
                 <a href="consultas/consulta10.php" class="list-group-item list-group-item-action">10.- Lista las calificaciones de un examen en un curso determinado</a>
                 <a href="consultas/consulta11.php" class="list-group-item list-group-item-action">11.- lista el promedio de calificaciones de un examen de un curso 
                     determinad</a>

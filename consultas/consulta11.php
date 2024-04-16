@@ -23,9 +23,9 @@ if (isset($_POST['curso'], $_POST['quiz'])) {
 
     // Obtener el promedio de calificaciones para el curso y quiz seleccionado
     // Obtener el promedio de calificaciones para el curso y quiz seleccionado
-$sqlResult = 'SELECT AVG(mdl_quiz_grades.grade) AS Promedio FROM mdl_quiz_grades INNER JOIN mdl_quiz ON mdl_quiz_grades.quiz = mdl_quiz.id INNER JOIN mdl_course ON mdl_quiz.course = mdl_course.id INNER JOIN mdl_user ON mdl_quiz_grades.userid = mdl_user.id WHERE mdl_quiz.id = 1 AND mdl_course.id = ?';
+$sqlResult = 'SELECT AVG(mdl_quiz_grades.grade) AS Promedio FROM mdl_quiz_grades INNER JOIN mdl_quiz ON mdl_quiz_grades.quiz = mdl_quiz.id INNER JOIN mdl_course ON mdl_quiz.course = mdl_course.id INNER JOIN mdl_user ON mdl_quiz_grades.userid = mdl_user.id WHERE mdl_quiz.id = ? AND mdl_course.id = ?';
 $stmtResult = $conn->prepare($sqlResult);
-$stmtResult->bind_param('i', $cursoId);
+$stmtResult->bind_param('ii', $quizId, $cursoId);
 $stmtResult->execute();
 $result = $stmtResult->get_result()->fetch_assoc();
 

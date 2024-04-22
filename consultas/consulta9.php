@@ -55,7 +55,7 @@ $cursos = getCursos($value);
 <body>
 <a href="../index.php" class="my-4 text-center"><h4>Regresar al menu</h4></a>
     <div class="container">
-        <h2 class="pt-4">Lista las calificaciones de una tarea determinada</h2>
+        <h2 class="pt-4">Lista de los examenes de un curso</h2>
         <form action="" method="post">
             <div class="mb-3">
                 <label for="cursos" class="form-label">Selecciona una tarea</label>

@@ -33,6 +33,38 @@
             </div>
 
             <div class="list-group list-group-numbered col-9 mt-4">
+                <h4 class="text-center fw-bold py-2">Ejercicios 17</h4>
+                <a href="consultas17/consulta1.php" class="list-group-item">1.- Tener como entrada el género y contar cuántos hay de cada uno.</a>
+                <a href="consultas17/consulta2.php" class="list-group-item">2.- Cuántos hombres foráneos hay.</a>
+                <a href="consultas17/consulta3.php" class="list-group-item">3.- Cuántas mujeres foráneas hay.</a>
+                <a href="consultas17/consulta4.php" class="list-group-item">4.- Cuántos no binarios y no foráneos hay.</a>
+
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                                5. Generacion de Reportes
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body p-0" >
+                                <a href="consultas17/consulta5.php" class="ps-5 list-group-item list-group-item-action">
+                                    5-1.- Un reporte que incluya: nombre, apellidos, número de control, género, foráneos.
+
+                                </a>
+                                <a href="consultas17/consulta5-2.php" class="ps-5 list-group-item list-group-item-action">
+                                    5-1.- Un reporte que incluya: nombre, apellidos, número de control, género, foráneos, Filtrado por cursos
+
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <div class="list-group list-group-numbered col-9 mt-4">
                 <h4 class="text-center fw-bold py-2">Ejercicios 18</h4>
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">

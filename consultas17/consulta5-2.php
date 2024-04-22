@@ -84,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <h2 class="pt-4">Reporte que incluya: nombre, apellidos, número de control, género, foráneos.</h2>
         <p>Filtrado por un curso en especifico</p>
+        
         <form method="POST">
             <select name="curso_id">
                 <?php foreach (getCursos() as $curso) : ?>

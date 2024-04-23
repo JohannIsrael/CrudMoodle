@@ -39,33 +39,33 @@
                 <a href="consultas17/consulta3.php" class="list-group-item">3.- Cuántas mujeres foráneas hay.</a>
                 <a href="consultas17/consulta4.php" class="list-group-item">4.- Cuántos no binarios y no foráneos hay.</a>
 
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionExample3">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne3" aria-expanded="true" aria-controls="collapseOne3" >
                                 5. Generacion de Reportes
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div id="collapseOne3" class="accordion-collapse collapse" data-bs-parent="#accordionExample3">
                             <div class="accordion-body p-0" >
                                 <a href="consultas17/consulta5.php" class="ps-5 list-group-item list-group-item-action">
                                     5-1.- Un reporte que incluya: nombre, apellidos, número de control, género, foráneos.
-
                                 </a>
                                 <a href="consultas17/consulta5-2.php" class="ps-5 list-group-item list-group-item-action">
                                     5-1.- Un reporte que incluya: nombre, apellidos, número de control, género, foráneos, Filtrado por cursos
-
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
+
                 
             </div>
 
             <div class="list-group list-group-numbered col-9 mt-4">
                 <h4 class="text-center fw-bold py-2">Ejercicios 18</h4>
+
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -82,6 +82,7 @@
                         </div>
                     </div>
                 </div>
+
                 <a href="consultas18/consulta2.php" class="list-group-item list-group-item-action">2.- Realiza la consulta SQL necesaria para obtener un listado de todos los cursos por categoría </a>
                 <a href="consultas18/consulta3.php" class="list-group-item list-group-item-action">3.- Realiza la consulta SQL necesaria para obtener un listado de todos los cursos por profesor, si es necesario, ajusta en la sección de Participantes, para que coincida que el mismo profesor pueda dar dos cursos. </a>
                 <a href="consultas18/consulta4.php" class="list-group-item list-group-item-action">4.- Realiza la consulta SQL necesaria para obtener un listado de cursos por mes.</a>
@@ -98,7 +99,12 @@
                                 <span class="d-block">1. ¿cuántos hombres participaron en curso en determinado mes?</span>
                                 <span class="d-block">2. ¿cuántas mujeres participaron en curso en determinado mes?</span>
                                 <span class="d-block">3. ¿cuántos no binarios participaran en curso en determinado mes?</span>
-                                <span class="d-block">4. ¿cuántos cursos se impartieron por mes?</span>
+                                
+                                </a>
+                            </div>
+                            <div class="accordion-body p-0" >
+                                <a href="consultas18/consulta5-2.php" class="ps-5 list-group-item list-group-item-action">
+                                    4. ¿cuántos cursos se impartieron por mes?
                                 </a>
                             </div>
                         </div>

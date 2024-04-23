@@ -1,52 +1,43 @@
 <?php
 include '../conexion.php';
 
-function getTable($query){
+function getInforme($profesor){
     global $conn;
+
+    $query = 
+    "
+    SELECT c.fullname AS 'Nombre del Curso' FROM mdl_course c JOIN mdl_context ctx ON c.id = ctx.instanceid JOIN mdl_role_assignments ra ON ctx.id = ra.contextid JOIN mdl_user u ON ra.userid = u.id WHERE ra.roleid = 3 AND CONCAT(u.firstname, ' ', u.lastname) = '$profesor' GROUP BY c.id;;
+    ";
+
     $statement = $conn->prepare($query);
     $statement->execute();
+
     $resultSet = $statement->get_result();
-    $alumnosxcurso = $resultSet->fetch_all(MYSQLI_ASSOC);
-    return $alumnosxcurso;
+    $count = $resultSet->fetch_all(MYSQLI_ASSOC);
+
+    return $count;
 }
 
-function getKeys($array){
-    $keys = [];
-    foreach ($array as $subArray) {
-        $keys = array_merge($keys, array_keys($subArray));
-    }
-    return array_unique($keys);
+function getProfs(){
+    global $conn;
+
+    $query = "SELECT DISTINCT CONCAT(u.firstname, ' ', u.lastname) AS 'Nombre del Profesor' FROM mdl_user u JOIN mdl_role_assignments ra ON u.id = ra.userid WHERE ra.roleid = 3;";
+
+    $statement = $conn->prepare($query);
+    $statement->execute();
+
+    $resultSet = $statement->get_result();
+    $profs = $resultSet->fetch_all(MYSQLI_ASSOC);
+
+
+    return $profs;
 }
 
-$value = NULL;
-$query = NULL;
-$objects = NULL;
-$keys = NULL;
-
-
-$query = "
-SELECT distinct mdl_user.username, mdl_user.firstname, mdl_course.fullname as Curso, mdl_role.shortname as rol
-FROM mdl_user_enrolments 
-INNER JOIN mdl_user ON mdl_user_enrolments.userid = mdl_user.id
-INNER JOIN mdl_enrol ON mdl_user_enrolments.enrolid = mdl_enrol.id
-INNER JOIN mdl_course ON mdl_enrol.courseid = mdl_course.id
-INNER JOIN mdl_role_assignments ON mdl_role_assignments.userid = mdl_user.id
-INNER JOIN mdl_role ON mdl_role.id = mdl_role_assignments.roleid
-where mdl_role.shortname = 'teacher';
-";
-
-
-$objects = getTable($query);
-$keys = getKeys($objects);
-
-
-// echo $value;
-// echo '<br>';
-// echo $query;
-// echo '<br>';
-// echo print_r($objects);
-// echo '<br>';
-// echo print_r($keys);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $countAll = getInforme($_POST['curso_id']);
+} else {
+    $countAll = getInforme(null);
+}
 
 ?>
 
@@ -62,29 +53,35 @@ $keys = getKeys($objects);
    
         <!-- Mostrar HTML después de que se envíe el formulario -->
         <h2 class="pt-4">Lista de cursos por profesor</h2>
+
+        <form method="POST">
+            <select name="curso_id">
+                <?php foreach (getProfs() as $genero) : ?>
+                    <option value="<?= $genero['Nombre del Profesor']; ?>"><?= $genero['Nombre del Profesor']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+
         
 
         <table class="table table-striped mt-5">
             <thead>
                 <tr>
-                    <?php foreach ($keys as $value) : ?>
-                        <th><?= $value; ?></th>
-                    <?php endforeach; ?>
+                    <th>Cursos</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($objects as $object) : ?>
+            
+                <?php foreach ($countAll as $count) : ?>
                     <tr>
-                        <?php foreach ($keys as $value) : ?>
-                            <td><?= $object[$value]; ?></td>
-                        <?php endforeach; ?>
+                        <td><?= $count['Nombre del Curso']; ?></td>
                     </tr>
                 <?php endforeach; ?>
+
+                <?php if (!$countAll) : ?>
+                    <h2>Aun no hay resgistros</h2>
+                <?php endif; ?>
             </tbody>
-        </table>
-            <?php if (!$objects) : ?>
-                <h2>Aun no hay resgistros</h2>
-            <?php endif; ?>
     
 </div>
 </body>

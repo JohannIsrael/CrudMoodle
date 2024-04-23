@@ -4,13 +4,9 @@ include '../conexion.php';
 function getInforme($genero){
     global $conn;
 
-    if($genero === "Otra cosa"){
-        $genero = "No Binarios";
-    }
-
     $query = 
     "
-    SELECT COUNT(CASE WHEN genero.data = 'Mujer' THEN 1 END) AS mujeres, COUNT(CASE WHEN genero.data = 'Hombre' THEN 1 END) AS hombres, COUNT(CASE WHEN genero.data = 'No binario' THEN 1 END) AS 'No binario' FROM mdl_user_info_data AS genero INNER JOIN mdl_user_info_field ON mdl_user_info_field.id = genero.fieldid WHERE mdl_user_info_field.shortname = 'genero' and genero.data = '$genero';
+    SELECT COUNT(CASE WHEN genero.data = 'Mujer' THEN 1 END) AS mujeres, COUNT(CASE WHEN genero.data = 'Hombre' THEN 1 END) AS hombres, COUNT(CASE WHEN genero.data = 'Otra cosa' THEN 1 END) AS 'No binario' FROM mdl_user_info_data AS genero INNER JOIN mdl_user_info_field ON mdl_user_info_field.id = genero.fieldid WHERE mdl_user_info_field.shortname = 'genero' and genero.data = '$genero';
     ";
 
     $statement = $conn->prepare($query);
@@ -73,11 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?> -->
 
         <form method="POST">
-            <select name="curso_id">
+            <select class="form-select" name="curso_id">
                 <?php foreach (getGenero() as $genero) : ?>
                     <option value="<?= $genero; ?>"><?= $genero; ?></option>
                 <?php endforeach; ?>
             </select>
+            <br> 
             <button type="submit" class="btn btn-primary">Filtrar</button>
             
         </form>

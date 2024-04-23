@@ -1,60 +1,36 @@
 <?php
 include '../conexion.php';
 
-function getTable($query){
+function getInforme(){
     global $conn;
+
+    // $query = 
+    // "
+    // SELECT c.category AS 'Categoría', c.fullname AS 'Nombre del Curso', CONCAT(u.firstname, ' ', u.lastname) AS 'Profesor', FROM_UNIXTIME(c.startdate, '%Y-%m-%d') AS 'Fecha Inicio', FROM_UNIXTIME(c.enddate, '%Y-%m-%d') AS 'Fecha Finalización', (SELECT COUNT(ra.userid) FROM mdl_role_assignments ra WHERE ra.contextid = ctx.id AND ra.roleid = 5) AS 'Número de Participantes' FROM mdl_course c JOIN mdl_context ctx ON c.id = ctx.instanceid JOIN mdl_role_assignments ra ON ctx.id = ra.contextid JOIN mdl_user u ON ra.userid = u.id WHERE ra.roleid = 3 GROUP BY c.id;
+    // ";
+
+    $query = 
+    "
+    SELECT cat.name AS 'Categoría', c.fullname AS 'Nombre del Curso', CONCAT(u.firstname, ' ', u.lastname) AS 'Profesor', FROM_UNIXTIME(c.startdate, '%Y-%m-%d') AS 'Fecha Inicio', FROM_UNIXTIME(c.enddate, '%Y-%m-%d') AS 'Fecha Finalización', (SELECT COUNT(ra.userid) FROM mdl_role_assignments ra WHERE ra.contextid = ctx.id AND ra.roleid = 5) AS 'Número de Participantes' FROM mdl_course c JOIN mdl_course_categories cat ON c.category = cat.id JOIN mdl_context ctx ON c.id = ctx.instanceid JOIN mdl_role_assignments ra ON ctx.id = ra.contextid JOIN mdl_user u ON ra.userid = u.id WHERE ra.roleid = 3 GROUP BY c.id;
+    ";
+
     $statement = $conn->prepare($query);
     $statement->execute();
+
     $resultSet = $statement->get_result();
-    $alumnosxcurso = $resultSet->fetch_all(MYSQLI_ASSOC);
-    return $alumnosxcurso;
+    $count = $resultSet->fetch_all(MYSQLI_ASSOC);
+
+    return $count;
 }
 
-function getKeys($array){
-    $keys = [];
-    foreach ($array as $subArray) {
-        $keys = array_merge($keys, array_keys($subArray));
-    }
-    return array_unique($keys);
-}
-
-$value = NULL;
-$query = NULL;
-$objects = NULL;
-$keys = NULL;
-
-
-$query = "
-SELECT DISTINCT mdl_course_categories.name as Categoria, mdl_course.fullname as Curso,  mdl_user.username, mdl_user.firstname,  mdl_role.shortname as rol, mdl_course.startdate, mdl_course.enddate
-FROM mdl_user_enrolments 
-INNER JOIN mdl_user ON mdl_user_enrolments.userid = mdl_user.id
-INNER JOIN mdl_enrol ON mdl_user_enrolments.enrolid = mdl_enrol.id
-INNER JOIN mdl_course ON mdl_enrol.courseid = mdl_course.id
-INNER JOIN mdl_course_categories ON mdl_course_categories.id = mdl_course.id
-INNER JOIN mdl_role_assignments ON mdl_role_assignments.userid = mdl_user.id
-INNER JOIN mdl_role ON mdl_role.id = mdl_role_assignments.roleid
-where mdl_role.shortname = 'teacher';
-";
-
-
-$objects = getTable($query);
-$keys = getKeys($objects);
-
-
-// echo $value;
-// echo '<br>';
-// echo $query;
-// echo '<br>';
-// echo print_r($objects);
-// echo '<br>';
-// echo print_r($keys);
+$lista = getInforme()
 
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lista de Profesores por curso y categoria</title>
+    <title>Categoría, nombre del curso, profesor, fecha inicio, fecha finalización, número de participantes.</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
 </head>
 <body>
@@ -62,30 +38,40 @@ $keys = getKeys($objects);
 <div class="container">
    
         <!-- Mostrar HTML después de que se envíe el formulario -->
-        <h2 class="pt-4">Lista de Profesores por curso y categoria</h2>
+        <h2 class="pt-4">Categoría, nombre del curso, profesor, fecha inicio, fecha finalización, número de participantes.</h2>
         
 
         <table class="table table-striped mt-5">
             <thead>
                 <tr>
-                    <?php foreach ($keys as $value) : ?>
-                        <th><?= $value; ?></th>
-                    <?php endforeach; ?>
+                    <th>Categoría</th>
+                    <th>Nombre del Curso</th>
+                    <th>Profesor</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha finalización</th>
+                    <th>Número de participantes</th>
+
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($objects as $object) : ?>
+            
+                <?php foreach ($lista as $count) : ?>
                     <tr>
-                        <?php foreach ($keys as $value) : ?>
-                            <td><?= $object[$value]; ?></td>
-                        <?php endforeach; ?>
+                        <td><?= $count['Categoría']; ?></td>
+                        <td><?= $count['Nombre del Curso']; ?></td>
+                        <td><?= $count['Profesor']; ?></td>
+                        <td><?= $count['Fecha Inicio']; ?></td>
+                        <td><?= $count['Fecha Finalización']; ?></td>
+                        <td><?= $count['Número de Participantes']; ?></td>
                     </tr>
                 <?php endforeach; ?>
+
+                <?php if (!$lista) : ?>
+                    <h2>Aun no hay resgistros</h2>
+                <?php endif; ?>
             </tbody>
+
+
         </table>
-            <?php if (!$objects) : ?>
-                <h2>Aun no hay resgistros</h2>
-            <?php endif; ?>
     
 </div>
 </body>

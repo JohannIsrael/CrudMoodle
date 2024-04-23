@@ -1,134 +1,128 @@
 <?php
 include '../conexion.php';
 
-function get_Table($mes){
+function getInforme($genero, $mes){
     global $conn;
-    $query = "
-    SELECT fullname as Curso, DATE_FORMAT(FROM_UNIXTIME(startdate), '%Y-%m-%d %H:%i:%s') AS 'Fecha inicio', DATE_FORMAT(FROM_UNIXTIME(enddate), '%Y-%m-%d %H:%i:%s') AS 'Fecha final' 
-    FROM mdl_course 
-    WHERE MONTH(FROM_UNIXTIME(startdate)) = $mes 
-    AND MONTH(FROM_UNIXTIME(enddate)) = $mes;
+
+    // if($genero === "Otra cosa"){
+    //     $genero = "No Binarios";
+    // }
+
+    $query = 
+    "
+    SELECT COUNT(DISTINCT u.id) as 'Total' FROM mdl_user u JOIN mdl_role_assignments ra ON u.id = ra.userid JOIN mdl_context ctx ON ra.contextid = ctx.id JOIN mdl_course c ON ctx.instanceid = c.id JOIN mdl_user_info_data genero ON u.id = genero.userid JOIN mdl_user_info_field field ON genero.fieldid = field.id WHERE ra.roleid = 5 AND field.shortname = 'genero' AND genero.data = '$genero' AND MONTH(FROM_UNIXTIME(c.startdate)) = '$mes';
+
     ";
+
     $statement = $conn->prepare($query);
     $statement->execute();
+
     $resultSet = $statement->get_result();
-    $alumnosxcurso = $resultSet->fetch_all(MYSQLI_ASSOC);
-    return $alumnosxcurso;
+    $count = $resultSet->fetch_all(MYSQLI_ASSOC);
+
+    return $count;
 }
 
-function get_Keys($array){
-    $keys = [];
-    foreach ($array as $subArray) {
-        $keys = array_merge($keys, array_keys($subArray));
-    }
-    return array_unique($keys);
+function getGenero(){
+    global $conn;
+
+    $query = "SELECT mdl_user_info_field.param1 FROM mdl_user_info_field WHERE mdl_user_info_field.id = 1;";
+
+    $statement = $conn->prepare($query);
+    $statement->execute();
+
+    $resultSet = $statement->get_result();
+    $generos = $resultSet->fetch_all(MYSQLI_ASSOC);
+
+    $param1 = $generos[0]['param1'];
+    $parts = explode("\n", $param1);
+
+    // $mujer = $parts[0];
+    // $hombre = $parts[1];
+    // $otraCosa = $parts[2];
+
+
+    return $parts;
 }
 
-$mes = NULL;
-$query = NULL;
-$objects = NULL;
-$keys = NULL;
-
-if (isset($_POST['mes'])) {
-    $mes = $_POST['mes'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $countAll = getInforme($_POST['curso_id'], $_POST['mes_id']);
+} else {
+    $countAll = getInforme(null, null);
 }
 
-if (isset($_POST['mes'])) {
-    $objects = get_Table($mes);
-    $keys = get_Keys($objects);
-}
 
-// echo $mes;
-// echo '<br>';
-// echo $query;
-// echo '<br>';
-// echo print_r($objects);
-// echo '<br>';
-// echo print_r($keys);
 
 ?>
+
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lista de cursos por mes</title>
+    <title>Lista de Categorias</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
 </head>
 <body>
 <a href="../index.php" class="my-4 text-center"><h4>Regresar al menu</h4></a>
-<div class="container">
-    <?php if ($_SERVER['REQUEST_METHOD'] !== 'POST') : ?>
-        <!-- Mostrar HTML antes de que se envíe el formulario -->
-        <h2 class="pt-4">Lista de cursos por mes</h2>
-        <form action="" method="POST">
-            <div class="mb-3">
-                <label for="mese" class="form-label">Seleccione un mes</label>
-                <select class="form-select" id="meses" name="mes" onchange="this.form.submit()">  
-                    <option value="">-- Selecciona una opción --</option>                  
-                    <option value="01">Enero</option>                 
-                    <option value="02">Febrero</option>                 
-                    <option value="03">Marzo</option>                 
-                    <option value="04">Abril</option>                 
-                    <option value="05">Mayo</option>                 
-                    <option value="06">Junio</option>                 
-                    <option value="07">Julio</option>                 
-                    <option value="08">Agosto</option>                 
-                    <option value="09">Septiembre</option>                 
-                    <option value="10">Octubre</option>                 
-                    <option value="11">Nomviembre</option>                 
-                    <option value="12">Diciembre</option>                 
-                </select>
-            </div>
-        </form>
-    <?php endif; ?>
+    <div class="container">
+        <h2 class="pt-4">Cuantos participantes hay dependiendo del genero.</h2>
 
-    <?php if ($_SERVER['REQUEST_METHOD'] === 'POST') : ?>
-        <!-- Mostrar HTML después de que se envíe el formulario -->
-        <h2 class="pt-4">Lista de cursos por mes</h2>
-        <form action="" method="post">
-            <div class="mb-3">
-                <label for="meses" class="form-label">Seleccione un mes</label>
-                <select class="form-select" id="meses" name="mes" onchange="this.form.submit()" >  
-                <option value="">-- Selecciona una opción --</option>                  
-                    <option value="01">Enero</option>                 
-                    <option value="02">Febrero</option>                 
-                    <option value="03">Marzo</option>                 
-                    <option value="04">Abril</option>                 
-                    <option value="05">Mayo</option>                 
-                    <option value="06">Junio</option>                 
-                    <option value="07">Julio</option>                 
-                    <option value="08">Agosto</option>                 
-                    <option value="09">Septiembre</option>                 
-                    <option value="10">Octubre</option>                 
-                    <option value="11">Nomviembre</option>                 
-                    <option value="12">Diciembre</option>                 
-                </select>
-            </div>
+        <!-- <?php
+        echo "<pre>";
+        print_r(getGenero());
+        echo "</pre>";
+        ?> -->
+
+        <form method="POST">
+            <select class="form-select" name="curso_id">
+                <?php foreach (getGenero() as $genero) : ?>
+                    <option value="<?= $genero; ?>"><?= $genero; ?></option>
+                <?php endforeach; ?>
+            </select>
+                    <br>
+                    
+            <select class="form-select" aria-label="Meses" name='mes_id'>
+                <option selected>Selecciona un mes</option>
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+
+                    <br>
+
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            
         </form>
 
-        <h2>MES: <?= $mes ?></h2>
         <table class="table table-striped mt-5">
             <thead>
                 <tr>
-                    <?php foreach ($keys as $value) : ?>
-                        <th><?= $value; ?></th>
-                    <?php endforeach; ?>
+                    <th>Total</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($objects as $object) : ?>
+            
+                <?php foreach ($countAll as $count) : ?>
                     <tr>
-                        <?php foreach ($keys as $value) : ?>
-                            <td><?= $object[$value]; ?></td>
-                        <?php endforeach; ?>
+                        <td><?= $count['Total']; ?></td>
                     </tr>
                 <?php endforeach; ?>
+
+                <?php if (!$countAll) : ?>
+                    <h2>Aun no hay resgistros</h2>
+                <?php endif; ?>
             </tbody>
+
+
         </table>
-            <?php if (!$objects) : ?>
-                <h2>Aun no hay resgistros</h2>
-            <?php endif; ?>
-    <?php endif; ?>
-</div>
+    </div>
 </body>
 </html>
